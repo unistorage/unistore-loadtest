@@ -1,3 +1,4 @@
 *.pyc
 *.sublime-*
 uwsgi.touch
+uwsgi.log
