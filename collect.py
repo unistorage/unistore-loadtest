@@ -41,7 +41,7 @@ def main():
         
         try:
             response = requests.get(url)
-            print '.'
+            print '.',
 
             if response.status_code == 200:
                 type_id = os.path.basename(args.url_list)
