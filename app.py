@@ -21,7 +21,7 @@ def app(request):
     	unistore_url = urlparse.urljoin(settings.UNISTORE_SERVE_URL, id)
     	return redirect(unistore_url, code=302)
     else:
-    	return Response('Not found', status=404)
+    	return Response(status=404)
 
 
 if __name__ == '__main__':
