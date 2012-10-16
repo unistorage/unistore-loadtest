@@ -3,8 +3,9 @@ import fileinput
 import requests
 import argparse
 import os
+
 import settings
-from StringIO import StringIO
+
 
 class UnistoreClient(object):
     def __init__(self, url, token):
