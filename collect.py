@@ -2,9 +2,9 @@ import redis
 import fileinput
 import requests
 import argparse
-
+import os
 import settings
-
+from StringIO import StringIO
 
 class UnistoreClient(object):
     def __init__(self, url, token):
@@ -12,16 +12,18 @@ class UnistoreClient(object):
         self.token = token
         self.redis = redis.StrictRedis(host='localhost', port=6379, db=0)
 
-    def _upload_file(self, content):
+    def _upload_file(self, type_id, file_name, content):
         response = requests.post(self.url,
-                files={'file': content}, headers={'Token': self.token})
+                                 data={'type_id': type_id},
+                                 files={'file': (file_name, content)},
+                                 headers={'Token': self.token})
         return response.status_code == 200 and response.json['id'] or None
 
     def _memorize(self, url, id):
         return self.redis.set(url, id)
 
-    def put_file(self, url, content):
-        id = self._upload_file(content)
+    def put_file(self, url, type_id, file_name, content):
+        id = self._upload_file(type_id, file_name, content)
         return id and self._memorize(url, id) or False
 
 
@@ -35,12 +37,16 @@ def main():
 
     for line in fileinput.input(args.url_list):
         url = line.strip()	
-        print url, 
+        print url,
+        
         try:
             response = requests.get(url)
+            print '.'
 
             if response.status_code == 200:
-                succeed = unistore.put_file(url, response.content)
+                type_id = os.path.basename(args.url_list)
+                file_name = url.rsplit('/', 1)[1]
+                succeed = unistore.put_file(url, type_id, file_name, response.content)
                 print (succeed and 'OK' or 'F')
             else:
                 print 'E'
