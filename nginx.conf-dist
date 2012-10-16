@@ -1,0 +1,19 @@
+http {
+  	server {
+		location /new66/resize/ {
+      		...  
+    	}
+
+    	location / {
+	      	include /usr/local/nginx/conf/uwsgi_params;
+	      	uwsgi_pass 127.0.0.1:3000;
+	      	uwsgi_intercept_errors on;
+	      	error_page 404 502 @fallback;
+    	}
+
+    	location @fallback {
+        	root /home/nfs-spool/web/s.66.ru;
+        	expires max;
+    	}
+	}
+}

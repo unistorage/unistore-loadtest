@@ -1,0 +1,2 @@
+UNISTORE_URL = 'http://79.172.49.141/'
+UNISTORE_SERVE_URL = 'http://79.172.49.142/'
