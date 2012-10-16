@@ -34,12 +34,18 @@ def main():
 	unistore = UnistoreClient(settings.UNISTORE_URL, args.token)
 
 	for line in fileinput.input(args.url_list):
-		url = line.strip()
-		response = requests.get(url)
-
-		if response.status_code == 200:
-			succeed = unistore.put_file(url, response.content)
-			print (succeed and '.' or 'F'),
+		url = line.strip()	
+		print url, 
+		try:
+			response = requests.get(url)
+			
+			if response.status_code == 200:
+				succeed = unistore.put_file(url, response.content)
+				print (succeed and 'OK' or 'F')
+			else:
+				print 'E'
+		except:
+			print 'E!'
 
 
 if __name__ == '__main__':
